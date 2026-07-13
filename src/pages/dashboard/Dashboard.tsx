@@ -138,7 +138,7 @@ function RecentTransactionsCard({ expenses, userCategories }: { expenses: any[];
       date: exp.date,
       color: getCategoryColor(userCategories, exp.category || "Other"),
     }));
-
+  //abcd
   return (
     <div className="bg-bg-surface border border-border-light rounded-xl p-6 shadow-subtle hover:border-border-hover hover:shadow-medium transition-all duration-200">
       {/* Card Header */}
