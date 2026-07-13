@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSettings } from "../../context/SettingsContext";
 
@@ -10,14 +10,13 @@ interface HeaderProps {
 
 export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: HeaderProps) {
   const navigate = useNavigate();
-  const location = useLocation();
   const { t, name } = useSettings();
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [isSearchMobileOpen, setIsSearchMobileOpen] = useState(false);
-  
+
   // Theme state
   const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem("theme") === "dark" || 
+    return localStorage.getItem("theme") === "dark" ||
       (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
   });
 
@@ -56,7 +55,7 @@ export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: He
         `circle(0px at ${x}px ${y}px)`,
         `circle(${endRadius}px at ${x}px ${y}px)`,
       ];
-      
+
       document.documentElement.animate(
         {
           clipPath: isDark ? [...clipPath].reverse() : clipPath,
@@ -78,15 +77,13 @@ export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: He
     navigate("/");
   };
 
-  const showBackButton = location.pathname.toLowerCase() !== "/layout/dashboard" && location.pathname !== "/Layout";
-
   return (
     <>
-      <header className="h-16 bg-bg-surface border-b p-2 border-border-light px-4 md:px-6 flex items-center justify-between transition-colors duration-150 relative z-20 shadow-subtle gap-4">
+      <header className="sticky top-0 h-16 p-2 bg-bg-surface/90 backdrop-blur-md border-b border-border-light px-4 md:px-6 flex items-center justify-between transition-all duration-300 z-30 shadow-medium gap-4">
         {/* Mobile Search Overlay */}
         {isSearchMobileOpen ? (
           <div className="absolute inset-0 bg-bg-surface px-4 flex items-center gap-3 sm:hidden z-30 animate-in slide-in-from-top duration-150">
-            <button 
+            <button
               onClick={() => {
                 setIsSearchMobileOpen(false);
                 setSearchQuery("");
@@ -109,18 +106,18 @@ export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: He
                 placeholder={t("") || ""}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="input-field w-full pl-9 pr-4 placeholder:text-text-muted text-sm h-10 rounded-full"
+                className="input-field w-full pl-9 pr-4 placeholder:text-text-muted text-sm h-10 rounded-full bg-bg-main/50 focus:bg-bg-surface border-border-light hover:border-border-hover/80 transition-all duration-200"
                 autoFocus
               />
             </div>
           </div>
         ) : null}
 
-        {/* Left side: Mobile Menu Toggle + Back Button + Search Bar */}
-        <div className="flex items-center flex-1 gap-2 max-w-xs sm:max-w-md">
-          <button 
+        {/* Left side: Mobile Menu Toggle + Search Bar */}
+        <div className="flex items-center flex-1 gap-3 max-w-xs sm:max-w-md">
+          <button
             onClick={onMenuToggle}
-            className="p-2 rounded-full hover:bg-bg-surface-hover text-text-secondary hover:text-text-primary md:hidden shrink-0 cursor-pointer"
+            className="p-2 rounded-full hover:bg-bg-surface-hover text-text-secondary hover:text-text-primary md:hidden shrink-0 cursor-pointer transition-colors"
             aria-label="Open sidebar"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,30 +125,6 @@ export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: He
             </svg>
           </button>
 
-          {showBackButton && (
-            <button 
-              onClick={() => navigate(-1)}
-              className="p-2 rounded-full hover:bg-bg-surface-hover text-text-secondary hover:text-text-primary shrink-0 cursor-pointer"
-              aria-label="Go back"
-              title="Go back"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-            </button>
-          )}
-
-          {/* Mobile Search Button Trigger */}
-          <button
-            onClick={() => setIsSearchMobileOpen(true)}
-            className="p-2 rounded-full hover:bg-bg-surface-hover text-text-secondary hover:text-text-primary sm:hidden shrink-0 cursor-pointer"
-            aria-label="Open search"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-          
           <div className="relative w-full hidden sm:block">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,13 +136,24 @@ export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: He
               placeholder={t("") || ""}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="input-field w-full pl-9 pr-4 placeholder:text-text-muted text-sm h-10 rounded-full"
+              className="input-field w-full pl-9 pr-4 placeholder:text-text-muted text-sm h-10 rounded-full bg-bg-main/50 focus:bg-bg-surface border-border-light hover:border-border-hover/80 transition-all duration-200"
             />
           </div>
         </div>
 
         {/* Right side: Actions */}
         <div className="flex items-center space-x-3 shrink-0">
+          {/* Mobile Search Button Trigger */}
+          <button
+            onClick={() => setIsSearchMobileOpen(true)}
+            className="h-10 w-10 flex items-center justify-center rounded-full border border-border-light hover:border-border-hover text-text-secondary hover:text-text-primary transition-all duration-150 cursor-pointer bg-bg-surface-hover/30 sm:hidden shrink-0"
+            aria-label="Open search"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
@@ -203,7 +187,7 @@ export default function Header({ searchQuery, setSearchQuery, onMenuToggle }: He
           {/* Logout Button */}
           <button
             onClick={() => setShowSignOutConfirm(true)}
-            className="h-10 w-10 flex items-center justify-center rounded-full border border-error/20 hover:border-error text-error hover:bg-error/5 transition-all duration-150 cursor-pointer"
+            className="h-10 w-10 flex items-center justify-center rounded-full hover: text-text-secondary hover: hover:transition-all duration-150 cursor-pointer bg-bg-surface-hover/30"
             aria-label="Log out"
             title="Log out"
           >

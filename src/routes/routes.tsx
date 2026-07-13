@@ -7,6 +7,7 @@ import Categories from "../pages/categories/Categories";
 import Profile from "../pages/profile/Profile";
 import AddExpenses from "../pages/Addexpenses/AddExpenses";
 import ProfileSettings from "../pages/profile-settings/ProfileSettings";
+import EditMonthlyBill from "../pages/profile-settings/EditMonthlyBill";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "ProfileSettings",
         element: <ProfileSettings />,
+      },
+      {
+        path: "EditMonthlyBill/:id",
+        element: <EditMonthlyBill />,
       },
       {
         path: "AddExpenses",

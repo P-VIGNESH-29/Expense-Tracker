@@ -13,10 +13,14 @@ function Login() {
   const [alertConfig, setAlertConfig] = useState({ title: "", message: "", type: "warning" as "info" | "warning" | "error" | "success" | "confirm" });
   
   // Theme state
-  const [isDark] = useState(() => {
+  const [isDark, setIsDark] = useState(() => {
     return localStorage.getItem("theme") === "dark" || 
       (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
   });
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+  };
 
   // Apply theme class on mount and theme change
   useEffect(() => {
@@ -149,8 +153,25 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#f8fafc] dark:bg-bg-main transition-colors duration-150">
-      
+    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#f8fafc] dark:bg-bg-main transition-colors duration-150 relative">
+      {/* Theme Switcher Button */}
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="absolute top-6 right-6 z-40 h-10 w-10 flex items-center justify-center rounded-full border border-border-light hover:border-border-hover text-text-secondary hover:text-text-primary transition-all duration-150 cursor-pointer bg-bg-surface-hover/30"
+        aria-label="Toggle Theme"
+      >
+        {isDark ? (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        )}
+      </button>
+
       {/* LEFT COLUMN: Brand, Marketing & Decorative (50% screen width on Desktop) */}
       <div className="lg:w-[50%] shrink-0 bg-gradient-to-br from-[#0B1020] to-[#111827] text-white p-8 md:p-16 flex flex-col justify-between relative overflow-hidden min-h-[40vh] lg:min-h-screen">
         {/* Abstract Glowing Decorative Backdrops */}
@@ -191,15 +212,15 @@ function Login() {
       </div>
 
       {/* RIGHT COLUMN: Clean White Form Area (50% screen width on Desktop) */}
-      <div className="w-full lg:w-[50%] flex items-center justify-center p-6 md:p-16 bg-white dark:bg-slate-950 transition-colors duration-150 overflow-y-auto">
+      <div className="w-full lg:w-[50%] flex items-center justify-center p-6 md:p-16 bg-bg-surface transition-colors duration-150 overflow-y-auto">
         <div className="w-full max-w-md space-y-8 py-8">
           
           {/* Header Title Block */}
           <div>
-            <h1 className="text-3xl font-bold font-display tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold font-display tracking-tight text-text-primary">
               {isSignUp ? "Create an account" : "Welcome Back"}
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 font-sans">
+            <p className="text-text-secondary text-sm mt-2 font-sans">
               {isSignUp ? "Get started in seconds" : "Please enter your details to sign in to Spendly."}
             </p>
           </div>
@@ -220,14 +241,14 @@ function Login() {
             {/* FULL NAME FIELD (Sign Up Only) */}
             {isSignUp && (
               <div className="space-y-1.5">
-                <label htmlFor="fullName" className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                <label htmlFor="fullName" className="text-xs font-bold  tracking-wider text-slate-600 dark:text-slate-400">
                   Full Name
                 </label>
                 <div className="relative">
                   <input
                     id="fullName"
                     type="text"
-                    className={`input-field w-full px-4 h-11 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-brand/20 ${fullNameError ? "border-error/50 focus:border-error" : ""}`}
+                    className={`input-field w-full px-4 h-11 text-sm rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 ${fullNameError ? "border-error/50 focus:border-error" : ""}`}
                     placeholder="John Doe"
                     value={fullName}
                     onChange={(e) => {
@@ -244,7 +265,7 @@ function Login() {
 
             {/* EMAIL / USERNAME FIELD */}
             <div className="space-y-1.5">
-              <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+              <label htmlFor="email" className="text-xs font-bold  tracking-wider text-slate-600 dark:text-slate-400">
                 Email Address
               </label>
               <div className="relative">
@@ -252,7 +273,7 @@ function Login() {
                 <input
                   id="email"
                   type="email"
-                  className={`input-field w-full px-4 h-11 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-brand/20 ${nameError ? "border-error/50 focus:border-error" : ""}`}
+                  className={`input-field w-full px-4 h-11 text-sm rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 ${nameError ? "border-error/50 focus:border-error" : ""}`}
                   placeholder="you@example.com"
                   value={inputname}
                   onChange={(e) => {
@@ -270,7 +291,7 @@ function Login() {
             {/* PASSWORD FIELD */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
-                <label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                <label htmlFor="password" className="text-xs font-bold  tracking-wider text-slate-600 dark:text-slate-400">
                   Password
                 </label>
                 {!isSignUp && (
@@ -284,7 +305,7 @@ function Login() {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  className={`input-field w-full pl-4 pr-10 h-11 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-brand/20 ${passwordError ? "border-error/50 focus:border-error" : ""}`}
+                  className={`input-field w-full pl-4 pr-10 h-11 text-sm rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 ${passwordError ? "border-error/50 focus:border-error" : ""}`}
                   placeholder="••••••••"
                   value={inputpassword}
                   onChange={(e) => {
@@ -310,14 +331,14 @@ function Login() {
             {/* CONFIRM PASSWORD (Sign Up Only) */}
             {isSignUp && (
               <div className="space-y-1.5">
-                <label htmlFor="confirmPassword" className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
+                <label htmlFor="confirmPassword" className="text-xs font-bold  tracking-wider text-slate-600 dark:text-slate-400">
                   Confirm Password
                 </label>
                 <div className="relative">
                   <input
                     id="confirmPassword"
                     type={showPassword ? "text" : "password"}
-                    className={`input-field w-full px-4 h-11 text-sm bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-brand/20 ${confirmPasswordError ? "border-error/50 focus:border-error" : ""}`}
+                    className={`input-field w-full px-4 h-11 text-sm rounded-lg focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 ${confirmPasswordError ? "border-error/50 focus:border-error" : ""}`}
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => {
@@ -351,7 +372,7 @@ function Login() {
             {/* ACTION BUTTON */}
             <button
               type="submit"
-              className="w-full h-11 bg-brand hover:bg-brand-hover text-white font-bold rounded-lg shadow-md shadow-brand/10 hover:shadow-lg hover:shadow-brand/20 active:scale-98 transition-all duration-150 cursor-pointer text-sm mt-2"
+              className="w-full h-11 bg-brand hover:bg-brand-hover text-white font-bold rounded-lg border-0 border-none outline-none shadow-md shadow-brand/10 hover:shadow-lg hover:shadow-brand/20 active:scale-98 transition-all duration-150 cursor-pointer text-sm mt-2"
             >
               {isSignUp ? "Sign Up" : "Sign In"}
             </button>

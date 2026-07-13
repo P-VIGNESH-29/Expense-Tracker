@@ -78,3 +78,28 @@
 body, div, header, main, aside, nav, button, input, select, textarea, span, h1, h2, h3, h4, h5, h6, p, a, svg, table, tr, td, th {
   transition: background-color 300ms ease-in-out, border-color 300ms ease-in-out, color 300ms ease-in-out, box-shadow 300ms ease-in-out, fill 300ms ease-in-out, stroke 300ms ease-in-out;
 }
+
+/* Custom Modern scrollbar inside select dropdown */
+.custom-select-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-select-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-select-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 9999px;
+  transition: background-color 200ms ease-in-out;
+}
+.custom-select-container:hover .custom-select-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+}
+.custom-select-container:hover .custom-select-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.7);
+}
+.dark .custom-select-container:hover .custom-select-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(75, 85, 99, 0.4);
+}
+.dark .custom-select-container:hover .custom-select-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(75, 85, 99, 0.7);
+}

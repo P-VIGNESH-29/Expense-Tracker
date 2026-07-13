@@ -100,13 +100,13 @@ export default function CustomSelect({
       </button>
 
       <div
-        className={`absolute left-0 right-0 mt-1.5 bg-bg-surface border border-border-light rounded-xl shadow-medium overflow-hidden z-50 transition-all duration-200 origin-top transform ${
+        className={`absolute left-0 right-0 mt-1.5 bg-bg-surface border border-border-light rounded-xl shadow-medium overflow-hidden z-50 transition-all duration-200 origin-top transform custom-select-container ${
           isOpen
             ? "opacity-100 scale-100 translate-y-0 animate-in fade-in zoom-in-95 duration-250"
             : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
         }`}
       >
-        <ul className="max-h-60 overflow-y-auto py-1.5">
+        <ul className="max-h-72 overflow-y-auto py-1.5 custom-select-scrollbar pr-1">
           {options.length === 0 ? (
             <li className="px-4 py-2 text-xs text-text-muted text-center">No options available</li>
           ) : (
@@ -117,7 +117,7 @@ export default function CustomSelect({
                 <li
                   key={opt.value}
                   onClick={() => handleSelect(opt.value)}
-                  className={`px-4 py-2 text-sm cursor-pointer transition-colors duration-150 flex items-center justify-between ${
+                  className={`mx-1.5 my-0.5 px-3 py-2 text-sm cursor-pointer transition-all duration-200 rounded-lg flex items-center justify-between font-medium ${
                     isSelected
                       ? "bg-brand/10 text-brand font-semibold"
                       : isHighlighted

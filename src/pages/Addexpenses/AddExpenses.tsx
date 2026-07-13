@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { categoryitems } from "../category/gategory";
 import { useSettings } from "../../context/SettingsContext";
+import BackButton from "../../components/common/BackButton";
 import AlertModal from "../../components/common/AlertModal";
 import CustomDatePicker from "../../components/common/CustomDatePicker";
 import { AlertTriangle } from "lucide-react";
@@ -192,15 +193,18 @@ function AddExpenses() {
 
   return (
     <div className="space-y-8 w-full">
-      <div>
-        <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("addExpense")}</h1>
-        <p className="text-text-secondary text-sm mt-1">Log a new spending transaction</p>
+      <div className="flex items-center gap-3">
+        <BackButton />
+        <div>
+          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("addExpense")}</h1>
+          <p className="text-text-secondary text-sm mt-1">Log a new spending transaction</p>
+        </div>
       </div>
 
       <div className="bg-bg-surface border border-border-light rounded-2xl p-6 space-y-6 shadow-medium w-full">
         {/* Amount Field */}
         <div className="flex flex-col space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+          <label className="text-xs font-semibold  tracking-wider text-text-secondary">
             {t("amount")} ({getCurrencySymbol()})
           </label>
           <div className="relative">
@@ -226,7 +230,7 @@ function AddExpenses() {
 
         {/* Date Field */}
         <div className="flex flex-col space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t("date")}</label>
+          <label className="text-xs font-semibold  tracking-wider text-text-secondary">{t("date")}</label>
           <CustomDatePicker
             value={date}
             onChange={(val) => {
@@ -240,7 +244,7 @@ function AddExpenses() {
 
         {/* Category Selector */}
         <div className="flex flex-col space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t("category")}</label>
+          <label className="text-xs font-semibold  tracking-wider text-text-secondary">{t("category")}</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {categories.map((item) => {
               const isSelected = category === item.type;
@@ -265,7 +269,7 @@ function AddExpenses() {
 
         {/* Payment Method Selector */}
         <div className="flex flex-col space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Payment Method</label>
+          <label className="text-xs font-semibold  tracking-wider text-text-secondary">Payment Method</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {paymentMethods.map((method) => {
               const isSelected = paymentMethod === method;
@@ -289,7 +293,7 @@ function AddExpenses() {
 
         {/* Description / Note Field */}
         <div className="flex flex-col space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Description / Note</label>
+          <label className="text-xs font-semibold  tracking-wider text-text-secondary">Description / Note</label>
           <input
             type="text"
             placeholder="Add a descriptive note (optional)"
@@ -301,12 +305,13 @@ function AddExpenses() {
 
         {/* Submit & Cancel Actions */}
         <div className="flex space-x-3 pt-4 border-t border-border-light">
+           <button onClick={() => navigate("../Expenses")} className="btn-secondary flex-1">
+            {t("cancel")}
+          </button>
           <button onClick={addexpenses} className="btn-primary flex-1">
             {t("addExpense")}
           </button>
-          <button onClick={() => navigate("../Expenses")} className="btn-secondary flex-1">
-            {t("cancel")}
-          </button>
+         
         </div>
       </div>
 

@@ -1,7 +1,8 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Trash2, Edit2, X, AlertTriangle, Check } from "lucide-react";
 import { useSettings } from "../../context/SettingsContext";
+import { getCategoryEmoji } from "../../utils/emojiHelper";
 import AlertModal from "../../components/common/AlertModal";
 import CustomSelect from "../../components/common/CustomSelect";
 import CustomDatePicker from "../../components/common/CustomDatePicker";
@@ -24,7 +25,7 @@ function Expenses() {
   const { formatCurrency, t, getCurrencySymbol, monthlyBudget, currentMonthBudgets, refreshSettings } = useSettings();
   const [expenses, setexpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const { searchQuery, setSearchQuery } = useOutletContext<{ searchQuery: string; setSearchQuery: (q: string) => void }>();
+  const [localSearchQuery, setLocalSearchQuery] = useState("");
   const currentUser = localStorage.getItem("currentUser") || "";
 
   useEffect(() => {
@@ -226,7 +227,7 @@ function Expenses() {
   };
 
   const filteredExpenses = expenses.filter((expense) => {
-    const q = searchQuery.toLowerCase();
+    const q = localSearchQuery.toLowerCase();
     const cat = (expense.category || "").toLowerCase();
     const note = (expense.note || "").toLowerCase();
     const amt = (expense.amount || "").toString();
@@ -258,9 +259,12 @@ function Expenses() {
     <div className="space-y-6">
       {/* Header section with title and dominant primary action */}
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("expenses")}</h1>
-          <p className="text-text-secondary text-sm mt-1">Track and manage your spending logs</p>
+        <div className="flex items-center gap-3">
+          
+          <div>
+            <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("expenses")}</h1>
+            <p className="text-text-secondary text-sm mt-1">Track and manage your spending logs</p>
+          </div>
         </div>
 
         {expenses.length > 0 && (
@@ -268,7 +272,7 @@ function Expenses() {
             className="btn-primary"
             onClick={() => navigate("../Addexpenses")}
           >
-            {t("addExpense")}
+            {t("Add")}
           </button>
         )}
       </div>
@@ -306,13 +310,13 @@ function Expenses() {
                   <input
                     type="text"
                     placeholder="Search note, category, amount..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    value={localSearchQuery}
+                    onChange={(e) => setLocalSearchQuery(e.target.value)}
                     className="input-field w-full pl-9 pr-8 placeholder:text-text-muted text-sm h-10 rounded-lg"
                   />
-                  {searchQuery && (
+                  {localSearchQuery && (
                     <button
-                      onClick={() => setSearchQuery("")}
+                      onClick={() => setLocalSearchQuery("")}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                       aria-label="Clear search"
                     >
@@ -325,18 +329,7 @@ function Expenses() {
               {/* Right Side: Category and Date filters */}
               <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
                 {/* Category Filter */}
-                <div className="flex flex-col gap-1 sm:w-48">
-                  <span className="text-[10px]  font-bold tracking-wider text-text-muted">{t("category")}</span>
-                  <CustomSelect
-                    value={selectedCategory}
-                    onChange={setSelectedCategory}
-                    options={[
-                      { value: "All", label: "All Categories" },
-                      ...categories.map((cat) => ({ value: cat.type, label: cat.type }))
-                    ]}
-                    className="w-full"
-                  />
-                </div>
+               
 
                 {/* Date Filter */}
                 <div className="flex flex-col gap-1 sm:w-48">
@@ -345,6 +338,18 @@ function Expenses() {
                     value={selectedDate}
                     onChange={setSelectedDate}
                     clearable={true}
+                    className="w-full"
+                  />
+                </div>
+                 <div className="flex flex-col gap-1 sm:w-48">
+                  <span className="text-[10px]  font-bold tracking-wider text-text-muted">{t("category")}</span>
+                  <CustomSelect
+                    value={selectedCategory}
+                    onChange={setSelectedCategory}
+                    options={[
+                      { value: "All", label: "All Categories" },
+                      ...categories.map((cat) => ({ value: cat.type, label: cat.type }))
+                    ]}
                     className="w-full"
                   />
                 </div>
@@ -359,12 +364,12 @@ function Expenses() {
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="border-b border-border-light bg-bg-surface-hover/50">
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary font-display w-32">{t("date")}</th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary font-display w-40">{t("category")}</th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary font-display w-40">Method</th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary font-display">Description / Note</th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary font-display text-right w-36">{t("amount")}</th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-text-secondary font-display text-center w-28">{t("actions")}</th>
+                    <th className="px-6 py-4 text-xs font-semibold  tracking-wider text-text-secondary font-display w-32">{t("date")}</th>
+                    <th className="px-6 py-4 text-xs font-semibold  tracking-wider text-text-secondary font-display w-40">{t("category")}</th>
+                    <th className="px-6 py-4 text-xs font-semibold  tracking-wider text-text-secondary font-display w-40">Method</th>
+                    <th className="px-6 py-4 text-xs font-semibold  tracking-wider text-text-secondary font-display">Description / Note</th>
+                    <th className="px-6 py-4 text-xs font-semibold  tracking-wider text-text-secondary font-display text-right w-36">{t("amount")}</th>
+                    <th className="px-6 py-4 text-xs font-semibold  tracking-wider text-text-secondary font-display text-center w-28">{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -471,8 +476,9 @@ function Expenses() {
                         >
                           <td className="px-6 py-4 text-sm text-text-primary">{formatDate(expense.date)}</td>
                           <td className="px-6 py-4 text-sm">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-brand/10 text-brand">
-                              {expense.category || "Other"}
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-brand/10 text-brand">
+                              <span>{getCategoryEmoji(expense.category)}</span>
+                              <span>{expense.category || "Other"}</span>
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-text-secondary">{expense.paymentMethod || "Cash"}</td>
