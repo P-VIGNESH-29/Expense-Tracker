@@ -1,0 +1,8 @@
+- [x] Define types in `src/types/index.ts`
+- [x] Create ProfileSettings page component
+- [x] Register new route in `src/routes/routes.tsx`
+- [x] Update Profile page to navigate to settings and display status badges
+- [x] Implement Dashboard budget initialization and overview section
+- [x] Integrate budget warnings in AddExpenses page
+- [x] Integrate budget warnings in Expenses page inline edit
+- [ ] Verify everything works correctly
