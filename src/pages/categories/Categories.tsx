@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { useSettings } from "../../context/SettingsContext";
+import { getCategoryEmoji, emojiList } from "../../utils/emojiHelper";
 import AlertModal from "../../components/common/AlertModal";
 
 // Category color hex codes
@@ -22,20 +23,10 @@ interface Category {
   color?: string;
 }
 
-// Predefined palette colors
-const colorPalette = [
-  "#F2B263",
-  "#7C9CFF",
-  "#C47CFF",
-  "#5FD7A3",
-  "#F27878",
-  "#FF9E7C",
-  "#7CC8FF",
-  "#8B90A0",
-];
+
 
 function Categories() {
-  const { t } = useSettings();
+  const { t, defaultCategories, formatCurrency } = useSettings();
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
   const currentUser = localStorage.getItem("currentUser") || "";
   const [categories, setCategories] = useState<Category[]>([]);
@@ -226,9 +217,12 @@ function Categories() {
     <div className="space-y-8">
       {/* Header section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("categories")}</h1>
-          <p className="text-text-secondary text-sm mt-1">{filteredCategories.length} of {categories.length} {t("categories")}</p>
+        <div className="flex items-center gap-3">
+        
+          <div>
+            <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("categories")}</h1>
+            <p className="text-text-secondary text-sm mt-1">{filteredCategories.length} of {categories.length} {t("categories")}</p>
+          </div>
         </div>
 
         <button
@@ -266,7 +260,7 @@ function Categories() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Category Name Input */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
+              <label className="text-xs font-semibold text-text-secondary  tracking-wider">
                 Category Name
               </label>
               <input
@@ -283,30 +277,28 @@ function Categories() {
 
             {/* Predefined Colors Picker */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                Category Color
+              <label className="text-xs font-semibold text-text-secondary">
+                Category symbol / emoji
               </label>
-              <div className="flex flex-wrap gap-2.5 pt-1">
-                {colorPalette.map((color) => {
-                  const isSelected = selectedColor === color;
+              <div className="grid grid-cols-6 sm:grid-cols-9 gap-2.5 pt-1">
+                {emojiList.map((item) => {
+                  const isSelected = selectedColor === item.emoji;
                   return (
                     <button
-                      key={color}
+                      key={item.emoji}
                       type="button"
                       onClick={() => {
-                        setSelectedColor(color);
+                        setSelectedColor(item.emoji);
                         if (errorMsg) setErrorMsg("");
                       }}
-                      className="w-8 h-8 rounded-full transition-all duration-150 relative cursor-pointer hover:scale-110 active:scale-95 shadow-sm"
-                      style={{ backgroundColor: color }}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all duration-150 cursor-pointer hover:scale-115 active:scale-95 border ${
+                        isSelected 
+                          ? "bg-brand/10 border-brand shadow-sm scale-110 font-bold" 
+                          : "bg-bg-surface-hover/50 border-border-light hover:bg-bg-surface-hover hover:border-border-hover/80"
+                      }`}
+                      title={item.label}
                     >
-                      {isSelected && (
-                        <span className="absolute inset-0 flex items-center justify-center text-white">
-                          <svg className="w-4 h-4 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                          </svg>
-                        </span>
-                      )}
+                      {item.emoji}
                     </button>
                   );
                 })}
@@ -355,7 +347,7 @@ function Categories() {
           return (
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <h2 className="text-sm font-bold font-display uppercase tracking-wider text-text-secondary">
+                <h2 className="text-sm font-bold font-display  tracking-wider text-text-secondary">
                   Default Monthly Bills
                 </h2>
                 <div className="h-[1px] bg-border-light flex-grow" />
@@ -372,24 +364,14 @@ function Categories() {
                       className="bg-bg-surface border border-border-light rounded-xl p-5 shadow-subtle hover:shadow-medium hover:border-border-hover transition-all duration-200 relative group flex flex-col justify-between min-h-[140px]"
                     >
                       {/* Actions overlay (Only Edit) */}
-                      <div className="absolute top-4 right-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-                        <button
-                          type="button"
-                          onClick={() => handleStartEdit(originalIndex, item)}
-                          className="p-2 rounded-lg text-text-muted hover:text-brand hover:bg-brand/10 transition-all duration-200 cursor-pointer"
-                          title="Edit Category"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                      </div>
+                      
 
                       {/* Top Part: Indicator & Info */}
                       <div className="flex items-center gap-4">
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-                          style={{ backgroundColor: `${color}18` }}
+                          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-bg-surface-hover border border-border-light text-2xl"
                         >
-                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
+                          {getCategoryEmoji(item.type, color)}
                         </div>
                         <div className="pr-16 truncate">
                           <div className="flex items-center gap-1.5 min-w-0">
@@ -398,9 +380,17 @@ function Categories() {
                             </h3>
                             
                           </div>
-                          <span className="text-xs text-text-secondary">
+                          <span className="text-xs text-text-secondary block">
                             {expenseCount} {expenseCount === 1 ? "expense" : "expenses"}
                           </span>
+                          {(() => {
+                            const correspondingDefault = defaultCategories.find(c => c.name.toLowerCase() === item.type.toLowerCase());
+                            return correspondingDefault ? (
+                              <span className="text-xs font-semibold text-brand block mt-0.5">
+                                Budget: {formatCurrency(correspondingDefault.monthlyBudget)}
+                              </span>
+                            ) : null;
+                          })()}
                         </div>
                       </div>
                     </div>
@@ -423,7 +413,7 @@ function Categories() {
           return (
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <h2 className="text-sm font-bold font-display uppercase tracking-wider text-text-secondary">
+                <h2 className="text-sm font-bold font-display  tracking-wider text-text-secondary">
                   Custom Categories
                 </h2>
                 <div className="h-[1px] bg-border-light flex-grow" />
@@ -464,10 +454,9 @@ function Categories() {
                       {/* Top Part: Indicator & Info */}
                       <div className="flex items-center gap-4">
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-                          style={{ backgroundColor: `${color}18` }}
+                          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-bg-surface-hover border border-border-light text-2xl"
                         >
-                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
+                          {getCategoryEmoji(item.type, color)}
                         </div>
                         <div className="pr-16 truncate">
                           <h3 className="font-bold text-base text-text-primary font-display leading-snug truncate" title={item.type}>

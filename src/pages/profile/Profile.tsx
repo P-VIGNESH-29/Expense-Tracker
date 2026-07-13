@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSettings } from "../../context/SettingsContext";
+import BackButton from "../../components/common/BackButton";
+import { getCategoryEmoji } from "../../utils/emojiHelper";
 
 function Profile() {
   const navigate = useNavigate();
@@ -91,14 +93,17 @@ function Profile() {
 
 
   return (
-    <div className="max-w-5xl space-y-8 relative animate-in fade-in duration-300">
-      <div>
-        <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">
-          {t("profileAndSettings")}
-        </h1>
-        <p className="text-text-secondary text-sm mt-1">
-          {t("managePreferences")}
-        </p>
+    <div className="space-y-8 animate-in fade-in duration-300">
+      <div className="flex items-center gap-3">
+        <BackButton />
+        <div>
+          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">
+            {t("profileAndSettings")}
+          </h1>
+          <p className="text-text-secondary text-sm mt-1">
+            {t("managePreferences")}
+          </p>
+        </div>
       </div>
 
 
@@ -128,22 +133,22 @@ function Profile() {
 
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block">
-                  Full Name
+                <span className="text-[10px] font-bold tracking-wider text-text-secondary block">
+                  Full name
                 </span>
                 <p className="text-sm font-semibold text-text-primary truncate">{name}</p>
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block">
-                  Email Address
+                <span className="text-[10px] font-bold tracking-wider text-text-secondary block">
+                  Email address
                 </span>
                 <p className="text-sm font-semibold text-text-primary truncate">{email}</p>
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block">
-                  Currency
+                <span className="text-[10px] font-bold tracking-wider text-text-secondary block">
+                  Default currency
                 </span>
                 <p className="text-sm font-semibold text-text-primary">
                   {currency === "USD" && "USD ($)"}
@@ -155,8 +160,8 @@ function Profile() {
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block">
-                  Monthly Budget
+                <span className="text-[10px] font-bold tracking-wider text-text-secondary block">
+                  Total monthly budget cap
                 </span>
                 <p className="text-sm font-semibold text-text-primary">
                   {formatCurrency(monthlyBudget)}
@@ -164,7 +169,7 @@ function Profile() {
               </div>
 
               <div className="space-y-1 col-span-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block">
+                <span className="text-[10px] font-bold tracking-wider text-text-secondary block">
                   Language
                 </span>
                 <p className="text-sm font-semibold text-text-primary">
@@ -182,38 +187,38 @@ function Profile() {
         {/* RIGHT COLUMN: Financial Summary Card */}
         <div className="bg-bg-surface border border-border-light rounded-xl p-6 shadow-subtle flex flex-col justify-between h-full">
           <div className="border-b border-border-light pb-4 mb-4">
-            <h3 className="text-base font-bold font-display text-text-primary uppercase tracking-wider">
+            <h3 className="text-base font-bold font-display text-text-primary  tracking-wider">
               Financial Summary
             </h3>
           </div>
           
           <div className="grid grid-cols-2 gap-4 flex-grow">
             <div className="p-4 rounded-xl bg-bg-main/30 border border-border-light/60 flex flex-col justify-center">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block mb-1">
+              <span className="text-[10px] font-bold tracking-wider text-text-secondary block mb-1">
                 Monthly Budget
               </span>
-              <p className="text-lg font-extrabold text-text-primary">{formatCurrency(monthlyBudget)}</p>
+              <p className="text-lg  text-text-primary">{formatCurrency(monthlyBudget)}</p>
             </div>
             
             <div className="p-4 rounded-xl bg-bg-main/30 border border-border-light/60 flex flex-col justify-center">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block mb-1">
+              <span className="text-[10px] font-bold tracking-wider text-text-secondary block mb-1">
                 Monthly Spent
               </span>
-              <p className="text-lg font-extrabold text-error">{formatCurrency(monthlySpent)}</p>
+              <p className="text-lg text-error">{formatCurrency(monthlySpent)}</p>
             </div>
             
             <div className="p-4 rounded-xl bg-bg-main/30 border border-border-light/60 flex flex-col justify-center">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block mb-1">
+              <span className="text-[10px] font-bold  tracking-wider text-text-secondary block mb-1">
                 Monthly Saving
               </span>
-              <p className="text-lg font-extrabold text-success">{formatCurrency(monthlySaving)}</p>
+              <p className="text-lg text-success">{formatCurrency(monthlySaving)}</p>
             </div>
             
             <div className="p-4 rounded-xl bg-bg-main/30 border border-border-light/60 flex flex-col justify-center">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary block mb-1">
+              <span className="text-[10px] font-bold  tracking-wider text-text-secondary block mb-1">
                 Year Saving Goal
               </span>
-              <p className="text-lg font-extrabold text-brand">{formatCurrency(yearSaving)}</p>
+              <p className="text-lg  text-brand">{formatCurrency(yearSaving)}</p>
             </div>
           </div>
         </div>
@@ -224,7 +229,7 @@ function Profile() {
         {/* Left: Account Actions Card */}
         <div className="bg-bg-surface border border-border-light rounded-xl p-6 shadow-subtle flex flex-col justify-between h-full min-h-[220px]">
           <div>
-            <h3 className="text-base font-bold font-display text-text-primary border-b border-border-light pb-3 uppercase tracking-wider">
+            <h3 className="text-base font-bold font-display text-text-primary border-b border-border-light pb-3  tracking-wider">
               {t("accountActions")}
             </h3>
             <p className="text-xs text-text-secondary mt-3 leading-relaxed">
@@ -234,16 +239,16 @@ function Profile() {
 
           <div className="flex items-center space-x-3 w-full pt-4">
             <button
-              onClick={() => setShowSignOutConfirm(true)}
-              className="flex-1 h-10 text-xs font-bold rounded-lg border border-border-light hover:bg-bg-surface-hover hover:border-border-hover text-text-secondary transition cursor-pointer flex items-center justify-center"
-            >
-              {t("signOut")}
-            </button>
-            <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="flex-1 h-10 text-xs font-bold rounded-lg bg-error hover:bg-error-hover text-white transition cursor-pointer flex items-center justify-center"
+              className="flex-1 h-10 text-xs font-bold rounded-lg bg-error hover:bg-error-hover text-white transition cursor-pointer flex items-center justify-center animate-in fade-in duration-200"
             >
               {t("deleteAccount")}
+            </button>
+            <button
+              onClick={() => setShowSignOutConfirm(true)}
+              className="flex-1 h-10 text-xs font-bold rounded-lg border border-border-light hover:bg-bg-surface-hover hover:border-border-hover text-text-secondary transition cursor-pointer flex items-center justify-center animate-in fade-in duration-200"
+            >
+              {t("signOut")}
             </button>
           </div>
         </div>
@@ -252,7 +257,7 @@ function Profile() {
         <div className="bg-bg-surface border border-border-light rounded-xl p-6 shadow-subtle flex flex-col justify-between h-full min-h-[220px]">
           <div>
             <div className="border-b border-border-light pb-3 mb-3">
-              <span className="text-sm font-bold uppercase tracking-wider text-text-primary block">
+              <span className="text-sm font-bold  tracking-wider text-text-primary block">
                 Recurring Monthly Bills Status
               </span>
             </div>
@@ -267,17 +272,16 @@ function Profile() {
                   return (
                     <div key={cat.id || idx} className="flex justify-between items-center p-2 rounded-lg bg-bg-main/30 border border-border-light/20">
                       <div className="flex items-center space-x-2.5 min-w-0">
-                        <span 
-                          className="w-2.5 h-2.5 rounded-full shrink-0" 
-                          style={{ backgroundColor: cat.color }}
-                        />
+                        <span className="text-base shrink-0">
+                          {getCategoryEmoji(cat.name, cat.color)}
+                        </span>
                         <span className="text-xs font-semibold text-text-primary truncate">{cat.name}</span>
                       </div>
                       <div className="flex items-center space-x-2 shrink-0">
                         <span className="text-[10px] text-text-muted">
                           {formatCurrency(spent)} / {formatCurrency(budget)}
                         </span>
-                        <span className={`text-[9px] font-extrabold tracking-wider uppercase px-2 py-0.5 rounded border ${
+                        <span className={`text-[9px] font-extrabold tracking-wider  px-2 py-0.5 rounded border ${
                           status === "Paid" 
                             ? "bg-success/10 text-success border-success/20" 
                             : "bg-error/10 text-error border-error/20"

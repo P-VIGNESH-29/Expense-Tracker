@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../../components/card/Card";
-// import router from "../../routes/routes";
 import { useSettings } from "../../context/SettingsContext";
+import { getCategoryEmoji } from "../../utils/emojiHelper";
 
 // Category color map — mirrors Categories.tsx
 const categoryColors: { [key: string]: string } = {
@@ -84,10 +84,9 @@ function SpendingByCategoryCard({ expenses, userCategories }: { expenses: any[];
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <span
-                      className="w-2.5 h-2.5 rounded-full shrink-0"
-                      style={{ backgroundColor: row.color }}
-                    />
+                    <span className="text-base shrink-0 mr-0.5">
+                      {getCategoryEmoji(row.name, row.color)}
+                    </span>
                     <span className="text-sm font-medium text-text-primary truncate">{row.name}</span>
                   </div>
                   <span className="text-sm font-bold font-display text-text-primary ml-4 shrink-0">
@@ -98,7 +97,7 @@ function SpendingByCategoryCard({ expenses, userCategories }: { expenses: any[];
                 <div className="h-1.5 w-full bg-border-light rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${barWidth}%`, backgroundColor: row.color }}
+                    style={{ width: `${barWidth}%`, backgroundColor: row.color.startsWith("#") ? row.color : "var(--brand)" }}
                   />
                 </div>
               </div>
@@ -138,7 +137,6 @@ function RecentTransactionsCard({ expenses, userCategories }: { expenses: any[];
       date: exp.date,
       color: getCategoryColor(userCategories, exp.category || "Other"),
     }));
-  //abcd
   return (
     <div className="bg-bg-surface border border-border-light rounded-xl p-6 shadow-subtle hover:border-border-hover hover:shadow-medium transition-all duration-200">
       {/* Card Header */}
@@ -151,7 +149,7 @@ function RecentTransactionsCard({ expenses, userCategories }: { expenses: any[];
           onClick={() => navigate("/Layout/Expenses")}
           className="text-xs font-semibold text-brand hover:text-brand-hover hover:underline transition-colors duration-150 cursor-pointer"
         >
-          View All →
+          View All
         </button>
       </div>
 
@@ -173,15 +171,11 @@ function RecentTransactionsCard({ expenses, userCategories }: { expenses: any[];
               className="flex items-center justify-between py-3 group hover:bg-bg-surface-hover/40 -mx-2 px-2 rounded-lg transition-colors duration-150"
             >
               <div className="flex items-center gap-3 min-w-0">
-                {/* Color dot */}
+                {/* Emoji Indicator */}
                 <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: `${tx.color}18` }}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-bg-surface-hover border border-border-light text-base"
                 >
-                  <span
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: tx.color }}
-                  />
+                  {getCategoryEmoji(tx.category, tx.color)}
                 </div>
                 {/* Category + Date */}
                 <div className="min-w-0">
@@ -304,9 +298,12 @@ function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("dashboard")}</h1>
-        <p className="text-text-secondary text-sm mt-1">{dayName}, {formattedDate}</p>
+      <div className="flex items-center gap-3">
+        
+        <div>
+          <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("dashboard")}</h1>
+          <p className="text-text-secondary text-sm mt-1">{dayName}, {formattedDate}</p>
+        </div>
       </div>
 
       {/* Summary Cards */}

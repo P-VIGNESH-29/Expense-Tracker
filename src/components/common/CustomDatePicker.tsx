@@ -154,11 +154,10 @@ export default function CustomDatePicker({
       </div>
 
       <div
-        className={`absolute left-0 mt-1.5 p-4 bg-bg-surface border border-border-light rounded-2xl shadow-medium z-50 w-72 transition-all duration-250 origin-top transform ${
-          isOpen
+        className={`absolute left-0 mt-1.5 p-4 bg-bg-surface border border-border-light rounded-2xl shadow-medium z-50 w-72 transition-all duration-250 origin-top transform ${isOpen
             ? "opacity-100 scale-100 translate-y-0 animate-in fade-in zoom-in-95 duration-250"
             : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-        }`}
+          }`}
       >
         {/* Calendar Header */}
         <div className="flex items-center justify-between mb-4">
@@ -184,7 +183,7 @@ export default function CustomDatePicker({
         {/* Weekday Labels */}
         <div className="grid grid-cols-7 gap-1 text-center mb-2">
           {WEEKDAYS.map((day) => (
-            <span key={day} className="text-[10px] font-bold text-text-muted uppercase">
+            <span key={day} className="text-[10px] font-bold text-text-muted ">
               {day}
             </span>
           ))}
@@ -200,15 +199,14 @@ export default function CustomDatePicker({
                 key={cell.dateStr + "_" + index}
                 type="button"
                 onClick={() => handleSelectDay(cell.dateStr)}
-                className={`h-8 w-8 text-xs font-semibold rounded-full flex items-center justify-center transition-all duration-150 cursor-pointer relative ${
-                  isSelected
+                className={`h-8 w-8 text-xs font-semibold rounded-full flex items-center justify-center transition-all duration-150 cursor-pointer relative ${isSelected
                     ? "bg-brand text-white shadow-subtle scale-105"
                     : isToday
-                    ? "border border-brand text-brand font-bold"
-                    : cell.isCurrentMonth
-                    ? "text-text-primary hover:bg-bg-surface-hover hover:scale-105"
-                    : "text-text-muted/40 hover:bg-bg-surface-hover"
-                }`}
+                      ? "border border-brand text-brand font-bold"
+                      : cell.isCurrentMonth
+                        ? "text-text-primary hover:bg-bg-surface-hover hover:scale-105"
+                        : "text-text-muted/40 hover:bg-bg-surface-hover"
+                  }`}
               >
                 {cell.dayNum}
               </button>

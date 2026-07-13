@@ -40,7 +40,7 @@ export default function Layout() {
           setSearchQuery={setSearchQuery} 
           onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
         />
-        <main className="flex-grow overflow-y-auto max-w-[1440px] w-full mx-auto p-4 md:p-8 text-text-primary">
+        <main className="flex-grow overflow-y-auto max-w-[1440px] w-full mx-auto px-4 md:px-6 py-4 md:py-8 text-text-primary">
           <Outlet context={{ searchQuery, setSearchQuery }} />
         </main>
       </div>
