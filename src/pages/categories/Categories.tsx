@@ -215,12 +215,11 @@ function Categories() {
 
   return (
     <div className="space-y-8">
-      {/* Header section */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="flex justify-between items-center gap-4">
+        <div className="flex items-center gap-3 min-w-0">
         
-          <div>
-            <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight">{t("categories")}</h1>
+          <div className="min-w-0">
+            <h1 className="text-3xl font-bold font-display text-text-primary tracking-tight break-words">{t("categories")}</h1>
             <p className="text-text-secondary text-sm mt-1">{filteredCategories.length} of {categories.length} {t("categories")}</p>
           </div>
         </div>
@@ -237,7 +236,7 @@ function Categories() {
               setErrorMsg("");
             }
           }}
-          className="flex items-center gap-2 px-4 h-11 bg-brand hover:bg-brand-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer self-start sm:self-auto"
+          className="flex items-center gap-2 px-4 h-11 bg-brand hover:bg-brand-hover text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer flex-shrink-0"
         >
           <Plus className="w-5 h-5" />
           <span>Add</span>
